@@ -1,162 +1,221 @@
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>testInuma</title>
+  <title>LeadManager</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 </head>
-<body class="flex flex-col min-h-screen bg-gradient-to-b from-white via-indigo-50 to-indigo-100 text-gray-700 font-sans">
+<body class="bg-black text-white font-sans tracking-wide">
 
   <!-- Header -->
-  <header class="sticky top-0 bg-white bg-opacity-90 backdrop-blur-sm shadow-md z-50">
-    <div class="container mx-auto flex justify-between items-center px-8 py-5">
-      <div class="flex items-center space-x-4">
-        <!-- Image/logo -->
-        <img src="{{ asset('assets/image/tache.png') }}" alt="Logo TaskMaster" class="w-12 h-12 object-contain" />
-        <div>
-          <h1 class="text-3xl font-light tracking-wide text-indigo-700">TestInuma</h1>
-          <p class="text-indigo-500 text-sm -mt-1">Inuma Lorem ipsum dolor sit.</p>
-        </div>
-      </div>
-      <nav class="space-x-8 text-indigo-600 font-medium text-lg hidden md:flex">
-        <a href="#" class="hover:text-indigo-900 transition">Accueil</a>
-        <a href="#" class="hover:text-indigo-900 transition">Tâches</a>
-        <a href="#" class="hover:text-indigo-900 transition">À propos</a>
-        <a href="#" class="hover:text-indigo-900 transition">Contact</a>
-      </nav>
-      <!-- Mobile menu button -->
-      <button id="menu-btn" class="md:hidden focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-      </button>
-    </div>
-    <!-- Mobile nav -->
-    <nav id="mobile-menu" class="hidden md:hidden bg-white bg-opacity-90 backdrop-blur-sm shadow-md px-8 py-4 space-y-4 text-indigo-600 font-medium text-lg">
-      <a href="#" class="block hover:text-indigo-900 transition">Accueil</a>
-      <a href="#" class="block hover:text-indigo-900 transition">Tâches</a>
-      <a href="#" class="block hover:text-indigo-900 transition">À propos</a>
-      <a href="#" class="block hover:text-indigo-900 transition">Contact</a>
+ <!-- Header -->
+<header class="fixed w-full top-0 left-0 z-50 bg-black bg-opacity-80 backdrop-blur-lg shadow-lg">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <h1 class="text-3xl font-light">Lead</h1>
+
+    <!-- Desktop nav -->
+    <nav id="desktop-nav" class="space-x-6 text-sm uppercase tracking-widest hidden md:flex">
+      <a href="#about" class="hover:underline">About Us</a>
+      <a href="{{ route('login') }}" class="hover:underline">Login</a>
     </nav>
-  </header>
 
-  <!-- Main Content -->
-  <main class="flex-grow container mx-auto px-4 md:px-8 py-16 max-w-6xl">
+    <!-- Mobile menu button -->
+    <button id="menu-btn" class="md:hidden focus:outline-none" aria-label="Toggle menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
 
-    <!-- Intro Section -->
-    <section class="mb-20 flex flex-col md:flex-row items-center gap-10 max-w-5xl mx-auto px-4">
-      <!-- Texte -->
-      <div class="md:w-1/2 text-center md:text-left">
-        <h2 class="text-4xl md:text-5xl font-extralight mb-6 leading-tight text-indigo-900">
-          Simplifiez votre quotidien,<br />gérez vos tâches sans effort
-        </h2>
-        <p class="text-lg md:text-xl text-indigo-700/80 mb-10 max-w-xl mx-auto md:mx-0">
-          TaskMaster vous aide à organiser vos projets et prioriser vos tâches grâce à une interface intuitive et un design épuré.
-        </p>
-        <a href="#" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 md:py-4 px-10 md:px-14 rounded-full shadow-lg transition">
-          Commencer maintenant
-        </a>
-      </div>
+  <!-- Mobile nav -->
+  <nav id="mobile-menu" class="hidden flex-col bg-black bg-opacity-90 backdrop-blur-lg shadow-lg px-6 py-6 space-y-4 text-white uppercase tracking-widest text-center">
+    <a href="#about" class="block hover:underline" onclick="toggleMenu()">About Us</a>
+    <a href="#login" class="block hover:underline" onclick="toggleMenu()">Login</a>
+  </nav>
+</header>
 
-      <!-- Image -->
-      <div class="md:w-1/2 flex justify-center md:justify-end">
-        <img src="{{ asset('assets/image/tache.png') }}" alt="Illustration tâches" class="max-w-full h-auto rounded-lg shadow-lg" />
-      </div>
-    </section>
 
-    <!-- Fonctionnalités clés -->
-    <section class="mb-24 px-4">
-      <h3 class="text-4xl font-light text-center text-indigo-800 mb-14">Fonctionnalités principales</h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto">
-        <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition">
-          <div class="text-indigo-500 mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5h6M9 12h6M9 19h6M4 7h.01M4 14h.01M4 21h.01" />
-            </svg>
-          </div>
-          <h4 class="text-2xl font-light mb-3 text-center text-indigo-700">Gestion simplifiée</h4>
-          <p class="text-center text-indigo-600/90 leading-relaxed">Créez, modifiez et supprimez vos tâches en toute simplicité.</p>
-        </div>
-
-        <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition">
-          <div class="text-indigo-500 mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2v-7H3v7a2 2 0 002 2z" />
-            </svg>
-          </div>
-          <h4 class="text-2xl font-light mb-3 text-center text-indigo-700">Rappels intelligents</h4>
-          <p class="text-center text-indigo-600/90 leading-relaxed">Ne ratez jamais une échéance grâce à des notifications précises.</p>
-        </div>
-
-        <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition">
-          <div class="text-indigo-500 mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87M7 7a4 4 0 11-8 0 4 4 0 018 0zm10 0a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-          </div>
-          <h4 class="text-2xl font-light mb-3 text-center text-indigo-700">Collaboration facile</h4>
-          <p class="text-center text-indigo-600/90 leading-relaxed">Partagez vos listes et travaillez en équipe efficacement.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Avantages -->
-    <section class="mb-24 bg-indigo-100 rounded-3xl py-14 px-10 max-w-4xl mx-auto shadow-md">
-      <h3 class="text-3xl font-light text-indigo-900 text-center mb-10">Pourquoi TaskMaster ?</h3>
-      <ul class="max-w-xl mx-auto list-inside list-disc space-y-6 text-indigo-800 text-lg leading-relaxed">
-        <li>Interface épurée et ultra intuitive</li>
-        <li>Synchronisation fluide sur tous vos appareils</li>
-        <li>Protection avancée de vos données personnelles</li>
-        <li>Assistance client réactive 7j/7</li>
-      </ul>
-    </section>
-
-    <!-- Témoignages -->
-    <section class="mb-24 max-w-6xl mx-auto px-6">
-      <h3 class="text-4xl font-light text-indigo-900 text-center mb-14">Ce que disent nos utilisateurs</h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-        <blockquote class="bg-white rounded-2xl p-8 shadow-lg border border-indigo-200">
-          <p class="text-indigo-700 italic mb-5">« TaskMaster a totalement changé ma manière d’organiser mes journées. Simple, rapide et efficace ! »</p>
-          <footer class="text-indigo-600 font-light text-right">— Claire D.</footer>
-        </blockquote>
-
-        <blockquote class="bg-white rounded-2xl p-8 shadow-lg border border-indigo-200">
-          <p class="text-indigo-700 italic mb-5">« Les rappels sont précis et m’aident à ne jamais oublier mes rendez-vous importants. »</p>
-          <footer class="text-indigo-600 font-light text-right">— Julien M.</footer>
-        </blockquote>
-
-        <blockquote class="bg-white rounded-2xl p-8 shadow-lg border border-indigo-200">
-          <p class="text-indigo-700 italic mb-5">« Partager mes listes avec l’équipe a augmenté notre productivité de façon impressionnante. »</p>
-          <footer class="text-indigo-600 font-light text-right">— Sophie L.</footer>
-        </blockquote>
-      </div>
-    </section>
-
-    <!-- Call to Action -->
-    <section class="text-center mb-20 max-w-3xl mx-auto px-4">
-      <h2 class="text-4xl font-extralight text-indigo-900 mb-8">Vous êtes prêt à maîtriser vos tâches ?</h2>
-      <a href="#" class="inline-block bg-indigo-700 text-white px-12 py-5 rounded-full text-xl font-semibold shadow-lg hover:bg-indigo-800 transition">
-        Lancez-vous dès aujourd’hui
+  <!-- Hero -->
+  <section id="hero" class="min-h-screen flex items-center justify-center px-6 text-center pt-32">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+    <!-- Texte -->
+    <div class="md:w-1/2 space-y-8 text-left fade-in">
+      <h2 class="text-5xl md:text-6xl font-extralight leading-tight">
+        Gérez vos prospects<br><span class="font-bold">comme un pro</span>
+      </h2>
+      <p class="text-lg text-gray-400">
+        Un tableau de bord intelligent pour capter, suivre et convertir vos leads avec style.
+      </p>
+      <a href="#pricing" class="inline-block mt-4 px-8 py-4 border border-white rounded-full text-sm uppercase tracking-widest hover:bg-white hover:text-black transition">
+        Démarrer
       </a>
-    </section>
+    </div>
 
-  </main>
+    <!-- Images à droite -->
+    <div class="md:w-1/2 flex gap-6 justify-center md:justify-end">
+      <img src="{{ asset('assets/image/image1.png') }}" alt="Image 1" class="rounded-lg shadow-lg max-w-[45%] object-cover" />
+      <img src="{{ asset('assets/image/image2.png') }}" alt="Image 2" class="rounded-lg shadow-lg max-w-[45%] object-cover" />
+    </div>
+  </div>
+</section>
+
+  <!-- Features -->
+  <section id="features" class="py-32 px-6 max-w-6xl mx-auto space-y-24">
+    <div class="grid md:grid-cols-3 gap-12 items-center">
+      <div class="fade-in">
+        <img src="{{ asset('assets/image/image1.png') }}" alt="Suivi intelligent" class="rounded-lg shadow-lg mb-6 w-full object-cover max-h-48" />
+        <h3 class="text-xl font-light mb-4">Suivi intelligent</h3>
+        <p class="text-gray-400">Gérez vos leads en temps réel avec une interface simple mais puissante.</p>
+      </div>
+      <div class="fade-in">
+        <img src="{{ asset('assets/image/image2.png') }}" alt="Notifications ciblées" class="rounded-lg shadow-lg mb-6 w-full object-cover max-h-48" />
+        <h3 class="text-xl font-light mb-4">Notifications ciblées</h3>
+        <p class="text-gray-400">Recevez des alertes personnalisées pour chaque interaction importante.</p>
+      </div>
+      <div class="fade-in">
+        <h3 class="text-xl font-light mb-4">Collaboration fluide</h3>
+        <p class="text-gray-400">Travaillez en équipe sur le pipeline de conversion de manière fluide.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statistics -->
+  <section id="statistics" class="bg-gray-900 py-32 px-6 text-center max-w-6xl mx-auto rounded-lg shadow-lg">
+    <h3 class="text-4xl font-light mb-16 fade-in">Chiffres clés</h3>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-16">
+      <div class="fade-in">
+        <span class="block text-5xl font-bold">+1500</span>
+        <span class="uppercase text-gray-400 tracking-widest">Leads gérés</span>
+      </div>
+      <div class="fade-in">
+        <span class="block text-5xl font-bold">98%</span>
+        <span class="uppercase text-gray-400 tracking-widest">Taux de conversion</span>
+      </div>
+      <div class="fade-in">
+        <span class="block text-5xl font-bold">250+</span>
+        <span class="uppercase text-gray-400 tracking-widest">Utilisateurs actifs</span>
+      </div>
+      <div class="fade-in">
+        <span class="block text-5xl font-bold">24/7</span>
+        <span class="uppercase text-gray-400 tracking-widest">Support client</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials" class="py-32 px-6 max-w-6xl mx-auto space-y-12">
+    <h3 class="text-4xl font-light text-center fade-in mb-14">Ce que disent nos clients</h3>
+    <div class="grid md:grid-cols-3 gap-12">
+      <blockquote class="fade-in bg-gray-900 rounded-xl p-8 shadow-lg border border-gray-700">
+        <img src="{{ asset('assets/image/image1.png') }}" alt="Alice M." class="w-16 h-16 rounded-full mx-auto mb-4 object-cover" />
+        <p class="text-gray-300 italic mb-5">« LeadManager a révolutionné notre suivi client. Plus jamais un lead perdu ! »</p>
+        <footer class="text-gray-400 font-light text-right">— Alice M.</footer>
+      </blockquote>
+      <blockquote class="fade-in bg-gray-900 rounded-xl p-8 shadow-lg border border-gray-700">
+        <img src="{{ asset('assets/image/image2.png') }}" alt="Thomas D." class="w-16 h-16 rounded-full mx-auto mb-4 object-cover" />
+        <p class="text-gray-300 italic mb-5">« Le système de notifications personnalisées est un vrai gain de temps pour mon équipe. »</p>
+        <footer class="text-gray-400 font-light text-right">— Thomas D.</footer>
+      </blockquote>
+      <blockquote class="fade-in bg-gray-900 rounded-xl p-8 shadow-lg border border-gray-700">
+        <p class="text-gray-300 italic mb-5">« Interface intuitive et support réactif, je recommande sans hésiter ! »</p>
+        <footer class="text-gray-400 font-light text-right">— Sophie R.</footer>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-32 px-6 max-w-6xl mx-auto text-center space-y-12">
+    <h3 class="text-4xl font-light fade-in">Tarifs simples et transparents</h3>
+    <div class="grid md:grid-cols-3 gap-10">
+      <div class="fade-in border border-white rounded-xl p-10 shadow-lg hover:shadow-2xl transition">
+        <h4 class="text-2xl font-semibold mb-6">Basic</h4>
+        <p class="text-gray-400 mb-6">Pour les petites équipes débutantes</p>
+        <span class="text-5xl font-bold mb-6 block">€19<span class="text-sm font-light">/mois</span></span>
+        <ul class="text-gray-400 mb-8 space-y-2">
+          <li>Gestion de 100 leads</li>
+          <li>Notifications email</li>
+          <li>Support basique</li>
+        </ul>
+        <a href="#" class="inline-block px-8 py-3 border border-white rounded-full hover:bg-white hover:text-black transition">Commencer</a>
+      </div>
+      <div class="fade-in border border-white rounded-xl p-10 shadow-lg hover:shadow-2xl transition bg-white text-black">
+        <h4 class="text-2xl font-semibold mb-6">Pro</h4>
+        <p class="mb-6">Idéal pour les équipes en croissance</p>
+        <span class="text-5xl font-bold mb-6 block">€49<span class="text-sm font-light">/mois</span></span>
+        <ul class="mb-8 space-y-2">
+          <li>Gestion illimitée des leads</li>
+          <li>Notifications push et email</li>
+          <li>Support prioritaire</li>
+        </ul>
+        <a href="#" class="inline-block px-8 py-3 border border-black rounded-full hover:bg-black hover:text-white transition">Commencer</a>
+      </div>
+      <div class="fade-in border border-white rounded-xl p-10 shadow-lg hover:shadow-2xl transition">
+        <h4 class="text-2xl font-semibold mb-6">Entreprise</h4>
+        <p class="text-gray-400 mb-6">Solutions sur mesure pour grandes équipes</p>
+        <span class="text-5xl font-bold mb-6 block">Sur devis</span>
+        <ul class="text-gray-400 mb-8 space-y-2">
+          <li>Fonctionnalités avancées</li>
+          <li>Intégrations CRM</li>
+          <li>Support dédié</li>
+        </ul>
+        <a href="#" class="inline-block px-8 py-3 border border-white rounded-full hover:bg-white hover:text-black transition">Contactez-nous</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="py-32 px-6 max-w-4xl mx-auto text-center space-y-12">
+    <h3 class="text-4xl font-light fade-in">Contactez-nous</h3>
+    <p class="text-gray-400 fade-in max-w-xl mx-auto">Une question ? Besoin d’une démo personnalisée ? Envoyez-nous un message, on vous répond rapidement.</p>
+    <form class="fade-in space-y-6 max-w-md mx-auto">
+      <input type="text" placeholder="Votre nom" required class="w-full px-4 py-3 rounded bg-gray-900 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-white" />
+      <input type="email" placeholder="Votre email" required class="w-full px-4 py-3 rounded bg-gray-900 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-white" />
+      <textarea placeholder="Votre message" rows="5" required class="w-full px-4 py-3 rounded bg-gray-900 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-white resize-none"></textarea>
+      <button type="submit" class="px-8 py-3 border border-white rounded-full hover:bg-white hover:text-black transition uppercase tracking-widest font-semibold">Envoyer</button>
+    </form>
+  </section>
 
   <!-- Footer -->
-  <footer class="bg-indigo-900 text-indigo-300 py-8 mt-auto">
-    <div class="container mx-auto px-8 text-center text-sm font-light tracking-widest">
-      &copy; 2025 TaskMaster. Tous droits réservés.
-    </div>
+  <footer class="py-12 text-center text-gray-500 text-sm border-t border-white border-opacity-10">
+    &copy; 2025 LeadManager — Tous droits réservés
   </footer>
 
   <script>
-    // Toggle mobile menu
-    const btn = document.getElementById('menu-btn');
-    const menu = document.getElementById('mobile-menu');
-    btn.addEventListener('click', () => {
-      menu.classList.toggle('hidden');
-    });
+    // Animation fade-in au scroll
+    const faders = document.querySelectorAll('.fade-in');
+    const appear = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    faders.forEach(fade => appear.observe(fade));
+
+    // Toggle menu mobile
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    function toggleMenu() {
+      mobileMenu.classList.toggle('hidden');
+    }
+
+    menuBtn.addEventListener('click', toggleMenu);
   </script>
 
 </body>
